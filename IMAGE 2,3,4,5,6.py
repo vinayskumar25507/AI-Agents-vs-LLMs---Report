@@ -111,7 +111,7 @@ ax.annotate("", xy=(4, 4.5), xytext=(3.5, 4.5), arrowprops=dict(arrowstyle="->",
 ax.annotate("", xy=(7, 4.5), xytext=(6.5, 4.5), arrowprops=dict(arrowstyle="->", lw=1.5))
 # Feedback Loop (The "Infinite Loop")
 ax.annotate("", xy=(2.25, 4), xytext=(8.25, 4), arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=-0.4", lw=1.5, color='red'))
-ax.text(5, 2.5, "Identical Observation\n(Loop Trigger)", ha='center', color='red', fontsize=9, fontweight='bold')
+ax.text(5.4, 3, "Identical Observation\n(Loop Trigger)", ha='center', color='darkblue', fontsize=9, fontweight='bold')
 # Failure Drop
 ax.annotate("", xy=(5.25, 2), xytext=(5.25, 4), arrowprops=dict(arrowstyle="->", lw=1.5, linestyle="--"))
 
