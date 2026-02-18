@@ -56,25 +56,85 @@ plt.show()
 # ---------------------------------------------------------
 # CHART 4: ACCURACY-COST PARETO FRONTIER
 # ---------------------------------------------------------
-# Data from HAL and AI Agents that Matter
-costs = [0.005, 0.01, 0.05, 0.50, 1.84, 4.00] # USD
-accuracy = [15.0, 18.6, 40.0, 70.0, 81.7, 95.4] # Success %
+# Data from the meta-analysis
+systems = [
+    "Llama-3 70B (Zero-Shot)", 
+    "Agent Q", 
+    "Standard Open-Source", 
+    "Claude 3.5 Sonnet Agent", 
+    "ReAct Scaffold", 
+    "AutoAgent", 
+    "M3Builder", 
+    "HAL Average Baseline", 
+    "HAL Frontier Agent"
+]
 
-plt.figure(figsize=(10, 6))
-plt.plot(costs, accuracy, marker='o', linestyle='-', color='#8e44ad', linewidth=2, markersize=8)
-plt.xscale('log') # Costs vary by orders of magnitude
-plt.xlabel('Inference Cost per Task (USD, Log Scale)')
-plt.ylabel('Success Rate (%)')
-plt.title('Figure 4: Accuracy-Cost Pareto Frontier')
-plt.grid(True, which="both", ls="-", alpha=0.5)
+# X-Axis: Estimated Inference Cost (USD)
+x_cost = [0.01, 1.85, 0.02, 3.50, 0.85, 1.40, 2.10, 0.01, 4.00]
+# Y-Axis: Task Success Rate (SR%)
+y_success = [18.6, 81.7, 0.0, 58.0, 33.5, 68.2, 94.3, 22.0, 78.2]
 
-# Annotations for specific points
-plt.annotate('GPT-4 Zero-shot', (0.01, 18.6), textcoords="offset points", xytext=(10,10), ha='center')
-plt.annotate('Agent Q (MCTS)', (4.00, 95.4), textcoords="offset points", xytext=(-20,-20), ha='center')
+# Categories for coloring and legend
+categories = [
+    "Monolithic Baseline",
+    "MCTS / Tree-Search",
+    "Monolithic Baseline",
+    "Multi-Agent System",
+    "Single-Agent Loop",
+    "Self-Evolving Agent",
+    "Multi-Agent System",
+    "Monolithic Baseline",
+    "Complex Scaffold"
+]
 
+# Set up the figure with high resolution (600 DPI for IEEE print standards)
+plt.figure(figsize=(10, 6), dpi=600)
+
+# Define specific colors and markers for each architecture category
+cat_styles = {
+    "Monolithic Baseline": {"color": "gray", "marker": "o"},
+    "MCTS / Tree-Search": {"color": "blue", "marker": "^"},
+    "Multi-Agent System": {"color": "green", "marker": "s"},
+    "Single-Agent Loop": {"color": "orange", "marker": "D"},
+    "Self-Evolving Agent": {"color": "purple", "marker": "P"},
+    "Complex Scaffold": {"color": "red", "marker": "*"}
+}
+
+# Plot scatter points and add labels next to each point
+for i in range(len(systems)):
+    cat = categories[i]
+    style = cat_styles[cat]
+    plt.scatter(x_cost[i], y_success[i], color=style["color"], marker=style["marker"], s=100, zorder=3)
+    # Offset the text slightly so it doesn't overlap the marker
+    plt.annotate(systems[i], (x_cost[i], y_success[i]), textcoords="offset points", xytext=(5,-10), ha='left', fontsize=8)
+
+# Create dummy scatter plots just to populate the Legend properly
+for cat, style in cat_styles.items():
+    plt.scatter([], [], color=style["color"], marker=style["marker"], label=cat)
+
+# Draw the Pareto Frontier line connecting the non-dominated points
+pareto_points = [
+    (0.01, 22.0), # HAL Baseline
+    (1.40, 68.2), # AutoAgent
+    (1.85, 81.7), # Agent Q
+    (2.10, 94.3)  # M3Builder
+]
+px, py = zip(*pareto_points)
+plt.plot(px, py, linestyle='--', color='black', alpha=0.7, label='Pareto Frontier', zorder=2)
+
+# Format the Axes (Logarithmic scale for X-axis is crucial here)
+plt.xscale('log')
+plt.xlabel('Inference-Time Compute Cost (USD, Log Scale)', fontsize=10)
+plt.ylabel('Task Success Rate (SR%)', fontsize=10)
+plt.title('Agentic ROI: Cost vs. Accuracy Pareto Frontier', fontsize=12, pad=15)
+
+# Add gridlines and the Legend
+plt.grid(True, which="both", ls="-", alpha=0.2)
+plt.legend(loc='lower right', fontsize=8)
+
+# Adjust layout to prevent clipping and save the image
 plt.tight_layout()
-plt.savefig('pareto_frontier.png', dpi=300)
-
+plt.savefig('pareto_frontier_chart.png', dpi=600, bbox_inches='tight')
 # ---------------------------------------------------------
 # CHART 5: FAILURE MODE DISTRIBUTION (PIE CHART)
 # ---------------------------------------------------------
